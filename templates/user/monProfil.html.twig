@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="jumbotron" id="jumbo-index">
+        <div class="container-fluid">
+            <div id="title-sortie">
+                <label style="font-size: 25px">
+                    {{ app.user.nom }} {{ app.user.prenom }}
+                </label>
+            </div>
+        </div>
+        <div id="form-filters">
+            {{ form_start(form) }}
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center mon-profil">
+                    <span class="badge badge-secondary">Pseudo</span>
+                    <div class="txt-input-profil">
+                        {{ form_widget(form.pseudo) }}
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Nom</span>
+                    {{ app.user.nom }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Prénom</span>
+                    {{ app.user.prenom }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Site</span>
+                    {{ app.user.site.nom }}
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Téléphone</span>
+                    <div class="txt-input-profil">
+                        {{ form_widget(form.telephone) }}
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Email</span>
+                    <div class="txt-input-profil">
+                        {{ form_widget(form.email) }}
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Nouveau mot de passe</span>
+                    <div class="txt-input-profil">
+                        {{ form_widget(form.password.first) }}
+                    </div>
+
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Confirmation mot de passe</span>
+                    <div class="txt-input-profil">
+                        {{ form_widget(form.password.second) }}
+                    </div>
+                </li>
+            </ul>
+            <div class="card-footer text-center">
+                <input type="submit" class="btn btn-success" value="Enregistrer">
+                <a href="{{ path('home') }}"><input type="button" class="btn btn-danger" value="Annuler"></a>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

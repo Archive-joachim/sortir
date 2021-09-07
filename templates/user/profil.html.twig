@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="jumbotron" id="jumbo-index">
+        <div class="container-fluid">
+            <div id="title-sortie">
+                <label style="font-size: 25px">
+                    {{ user.pseudo }}
+                </label>
+            </div>
+        </div>
+        <div id="form-filters">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Nom</span>
+                    {{ user.nom }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Prénom</span>
+                    {{ user.prenom }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Téléphone</span>
+                        {{ user.telephone }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Email</span>
+                        {{ user.email }}
+                </li>
+            </ul>
+            <div class="card-footer text-center">
+                <a href="{{ path('home') }}"><input type="button" class="btn btn-primary" value="Retour"></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

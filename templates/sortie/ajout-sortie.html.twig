@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="jumbotron" id="jumbo-index">
+        <div class="container-fluid">
+            <div id="title-sortie">
+                <label style="font-size: 25px">
+                    Création d'une sortie
+                </label>
+            </div>
+        </div>
+        <div id="form-filters">
+            {% form_theme form 'bootstrap_4_horizontal_layout.html.twig' %}
+            {% set currentDate = "now"|date("Y-m-d") %}
+            {% set currentTime = "now"|date("H:i") %}
+            {% set currentDateDebut = currentDate %}
+            {% set currentDateFin = currentDate %}
+            {% set currentDateLimite = currentDate %}
+            {% set currentTimeDebut = currentTime %}
+            {% set currentTimeFin = currentTime %}
+            {% set currentTimeLimite = currentTime %}
+            {% if form.vars.data.dateHeureDebut %}
+                {% set currentDateDebut = form.vars.data.dateHeureDebut|date("Y-m-d") %}
+                {% set currentTimeDebut = form.vars.data.dateHeureDebut|date("H:i") %}
+            {% endif %}
+            {% if form.vars.data.dateHeureFin %}
+                {% set currentDateFin = form.vars.data.dateHeureFin|date("Y-m-d") %}
+                {% set currentTimeFin = form.vars.data.dateHeureFin|date("H:i") %}
+            {% endif %}
+            {% if form.vars.data.dateLimiteInscription %}
+                {% set currentDateLimite = form.vars.data.dateLimiteInscription|date("Y-m-d") %}
+                {% set currentTimeLimite = form.vars.data.dateLimiteInscription|date("H:i") %}
+            {% endif %}
+            {{ form_start(form) }}
+            <div class="form-group">
+                <div class="container-fluid p-1 my-auto">
+                    <label>Nom de la sortie</label>
+                    {{ form_widget (form.nom) }}
+                </div>
+                <div class="container-fluid p-1 my-auto">
+                    {{ form_errors(form.dateHeureDebut) }}
+                    <div class="container-fluid p-1 my-auto">
+                        <label>
+                            Date de début
+                        </label>
+                        <div class="container-fluid form-inline p-1 my-auto">
+                            {{ form_widget(form.dateHeureDebut.date,{ 'attr': {value: currentDateDebut, min: currentDate} }) }}
+                            {{ form_widget(form.dateHeureDebut.time,{ 'attr': {value: currentTimeDebut} }) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid p-1 my-auto">
+                    {{ form_errors(form.dateHeureFin) }}
+                    <div class="container-fluid p-1 my-auto">
+                        <label>
+                            Date de fin
+                        </label>
+                        <div class="container-fluid form-inline p-1 my-auto">
+                            {{ form_widget(form.dateHeureFin.date,{ 'attr': {value: currentDateFin, min: currentDate} }) }}
+                            {{ form_widget(form.dateHeureFin.time,{ 'attr': {value: currentTimeFin} }) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid p-1 my-auto">
+                    {{ form_errors(form.dateLimiteInscription) }}
+                    <div class="container-fluid p-1 my-auto">
+                        <label>
+                            Cloture des inscriptions
+                        </label>
+
+                        <div class="container-fluid form-inline p-1 my-auto">
+                            {{ form_widget(form.dateLimiteInscription.date,{ 'attr': {value: currentDateLimite, min: currentDate} }) }}
+                            {{ form_widget(form.dateLimiteInscription.time,{ 'attr': {value: currentTimeLimite} }) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid p-1 my-auto">
+                    {{ form_errors(form.nbInscriptionsMax) }}
+                    <label>Limite de participants</label>
+                    {{ form_widget(form.nbInscriptionsMax) }}
+                </div>
+
+                <div class="container-fluid p-1 my-auto">
+                    <label>Détails de la sortie</label>
+                    {{ form_widget(form.infosSortie) }}
+                </div>
+
+                <div class="container-fluid p-1 my-auto">
+                    <label>Ville</label>
+                    {{ form_widget(form.ville,{ 'id': 'city'}) }}
+                </div>
+                <div class="container-fluid p-1 my-auto">
+                    <label>Lieu</label>
+                    <select id="lieux" name="lieu" class="form-control" required>
+                    </select>
+                </div>
+                <div class="container-fluid p-2 my-auto">
+                    <label>
+                        Adresse:
+                        <span id="street"></span>
+                    </label>
+                </div>
+                <div class="container-fluid p-2 my-auto">
+                    <label>
+                        Latitude:
+                        <span id="latitude"></span>
+                    </label>
+                </div>
+                <div class="container-fluid p-2 my-auto">
+                    <label>
+                        Longitude:
+                        <span id="longitude"></span>
+                    </label>
+                </div>
+
+
+            </div>
+            <div class="card-text" id="div-sortie-btn">
+                <button type="submit" name="create" value="create" class="btn btn-primary">
+                    Créer la sortie
+                </button>
+                <button type="submit" name="publish" value="publish" class="btn btn-success">
+                    Publier la sortie
+                </button>
+                <button type="reset" name="cancel" class="btn btn-warning">
+                    Réinitialiser les champs
+                </button>
+                <a href="{{ path('home') }}" class="btn btn-danger">
+                    Annuler
+                </a>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{{ asset('js/action.js') }}"></script>
+    {% if form.vars.data.lieu.id is defined %}
+        <script>
+            setTimeout(function () {
+                $('#lieux option[value=' +{{ form.vars.data.lieu.id }} +']').attr("selected", "selected");
+            }, 500);
+        </script>
+    {% endif %}
+{% endblock %}
+

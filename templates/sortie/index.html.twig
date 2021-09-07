@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les sorties {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="jumbotron" id="jumbo-index">
+        <div class="container-fluid" id="detail-user">
+            <div class="form-inline">
+                <label class="mr-auto">{{ "now"|date("d/m/Y") }}</label>
+                <label class="ml-auto">
+                    {% if app.user.pseudo != null %}
+                        {{ app.user.pseudo }}
+                    {% else %}
+                        {{ app.user.nom }} {{ app.user.prenom }}
+                    {% endif %}
+                </label>
+            </div>
+        </div>
+        <form method="post" id="form-filters">
+            <div class="row justify-content form-group">
+                <div class="col d-flex flex-column">
+                    <div class="container-fluid p-1 my-auto">
+                        <select name="site" required class="form-control">
+                            <option value="all_sites">Tous les sites</option>
+                            {% for site in sites %}
+                                <option value="{{ site.id }}">{{ site.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="container-fluid p-1">
+                        <input type="text" placeholder="Nom de la sortie" name="nom_sortie" class="form-control">
+                    </div>
+                    <div class="container-fluid d-inline-flex p-1 my-auto">
+                        Débute: <input type="date" name="date_debut" placeholder="entre le" class="form-control"
+                                       id="input-filters">
+                    </div>
+                    <div class="container-fluid d-inline-flex p-1 my-auto">
+                        Termine: <input type="date" name="date_fin" placeholder="et le" class="form-control"
+                                        id="input-filters">
+                    </div>
+                </div>
+                <div class="col d-flex flex-column  my-auto">
+                    <div class="container-fluid p-2"><input type="checkbox" class="form-check-input"
+                                                            name="organised_by_me" value="checked">
+                        <label class="form-check-label" for="organised_by_me">Sorties dont je suis
+                            l'organisateur/trice</label>
+                    </div>
+                    <div class="container-fluid p-2"><input type="checkbox" class="form-check-input" name="registered"
+                                                            value="checked">
+                        <label class="form-check-label" for="registered">Sorties auxquelles je suis inscrit/e</label>
+                    </div>
+                    <div class="container-fluid p-2"><input type="checkbox" class="form-check-input"
+                                                            name="not_registered" value="checked">
+                        <label class="form-check-label" for="not_registered">Sorties auxquelles je ne suis pas
+                            inscrit/e</label></div>
+                    <div class="container-fluid p-2"><input type="checkbox" class="form-check-input" name="passed"
+                                                            value="checked">
+                        <label class="form-check-label" for="passed">Sorties passées</label></div>
+                </div>
+                <div class="col d-flex flex-column my-auto">
+                    <input type="submit" class="btn btn-primary  p-2" value="Rechercher">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="justify-content">
+        <form action="{{ path('add-sortie') }}">
+            <input type="submit" class="btn btn-primary" value="Créer une sortie">
+        </form>
+    </div>
+    <div class="table-responsive ">
+        <table class="table table-bordered table-striped table-dark table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Nom de la sortie</th>
+                <th  class="text-center" scope="col">Date de la sortie</th>
+                <th  class="text-center" scope="col">Clôture</th>
+                <th  class="text-center" scope="col">Inscrits/places</th>
+                <th  class="text-center" scope="col">Etat</th>
+                <th  class="text-center" scope="col">Inscrit</th>
+                <th  class="text-center" scope="col">Organisateur</th>
+                <th  class="text-center" scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
+                {% if sortie.etat.libelle != 'créée' or sortie.organisateur == app.user %}
+                    <tr>
+                        <th scope="row">{{ sortie.nom }}</th>
+                        <td class="text-center">{{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</td>
+                        <td class="text-center">{{ sortie.dateLimiteInscription|date('d/m/Y H:i') }}</td>
+                        <td class="text-center">{{ sortie.inscriptions.count() }}/{{ sortie.nbInscriptionsMax }}</td>
+                        <td class="text-center">{{ sortie.etat.libelle }}</td>
+                        <td class="text-center">
+                            <i>
+                                {% if sortie.isRegistered(app.user) %}
+                                    <i>oui</i>
+                                {% endif %}
+                            </i>
+                        </td>
+
+
+                        <td class="text-center">{{ sortie.organisateur.nom }}</td>
+                        <td class="td-btn-sortie">
+                            {% if sortie.organisateur == app.user and sortie.etat.libelle == 'créée' %}
+                                <a href="{{ path('modif-sortie', {'id' : sortie.id}) }}">Modifier</a>
+                                -
+                                <a href="{{ path('publish-sortie', {'id' : sortie.id}) }}">Publier</a>
+                            {% else %}
+                                <a href="{{ path('show-sortie', {'id' : sortie.id}) }}">Afficher</a>
+                                {% if sortie.isOpened and sortie.organisateur != app.user %}
+                                    {% if sortie.isRegistered(app.user) %}
+                                        -  <a href="{{ path('desinscription', {'id' : sortie.id}) }}">Se désister</a>
+                                    {% elseif not sortie.isFull %}
+                                        -  <a href="{{ path('inscription', {'id' : sortie.id}) }}">S'inscrire</a>
+                                    {% endif %}
+                                {% endif %}
+                                {% if sortie.organisateur == app.user and (sortie.etat.libelle == 'ouverte' or sortie.etat.libelle == 'clôturée') %}
+                                    - <a href="{{ path('annul-sortie', {'id' : sortie.id}) }}">Annuler</a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p></p>
+
+{% endblock %}

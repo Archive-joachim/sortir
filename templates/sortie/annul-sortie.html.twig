@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+    <div class="jumbotron" id="jumbo-index">
+        <div class="container-fluid">
+            <div id="title-sortie">
+                <label style="font-size: 25px">
+                    Annuler une sortie
+                </label>
+            </div>
+        </div>
+        <div id="form-filters">
+            <div class="dates">
+                <div class="start">
+                    <strong>DEBUT</strong>{{ sortie.dateHeureDebut|date('d/m/Y H:i') }}
+                    <span></span>
+                </div>
+                <div class="ends">
+                    <strong>FIN</strong>{{ sortie.dateHeureFin|date('d/m/Y H:i') }}
+                </div>
+            </div>
+            <ul class="list-group">
+                {% if sortie.etat.libelle == 'annulée' %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-center"
+                        id="div-notok">
+                        <span class="badge badge-danger">Sortie annulée</span>
+                        <label>MOTIF: {{ sortie.motif }}</label>
+                    </li>
+                {% elseif sortie.etat.libelle == 'cloturée' %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-center"
+                        id="div-notok">
+                        <span class="badge badge-warning">Inscriptions closes</span>
+                        <label>La date limite d'inscription est dépassée</label>
+                    </li>
+                {% elseif sortie.inscriptions.count() == sortie.nbInscriptionsMax %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-center"
+                        id="div-notok">
+                        <span class="badge badge-warning">Plus de places</span>
+                        <label>Le nombre maximum de participants a été atteint</label>
+                    </li>
+                {% endif %}
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Nom</span>
+                    {{ sortie.nom }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Lieu</span>
+                    {{ sortie.Lieu.nom }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Adresse</span>
+                    {{ sortie.Lieu.rue }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Ville</span>
+                    {{ sortie.Lieu.ville.nom }} (
+                    {{ sortie.Lieu.ville.codePostal }})
+                </li>
+            </ul>
+
+            <div>
+                <form method="post">
+                    <textarea class="form-control z-depth-1" name="motif-annul" required
+                              placeholder="Motif de l'annulation" style="margin-top: 8px"></textarea>
+                    <div class="card-text" id="div-sortie-btn">
+                        <a class="btn btn-primary" href="{{ path('show-sortie', {id: sortie.id}) }}">Retour</a>
+                        <button type="submit" class="btn btn-success">Annuler la sortie</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+    {% block title %}
+
+    {% endblock %}
+

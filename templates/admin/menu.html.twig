@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="card-footer text-center">
+    <div class="card-text" id="div-sortie-btn">
+        <a class="btn btn-primary" href="{{ path('admin_ville') }}">gestion villes</a>
+        <a class="btn btn-primary" href="{{ path('admin_lieu') }}">gestion lieux</a>
+        <a class="btn btn-primary" href="{{ path('admin_utilisateur') }}">gestion utilisateurs</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

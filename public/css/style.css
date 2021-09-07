@@ -1,0 +1,200 @@
+img {
+    width: 30%;
+    height: auto;
+}
+body{
+    background-image: url("../img/sunset.jpg");
+    background-attachment: fixed;
+    background-size: cover;
+}
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+#header {
+    background: #2599C2;
+    color: white;
+    padding: 15px;
+}
+#footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    margin-top: auto;
+    background: #313131;
+    text-align: center;
+}
+#footer > div > div {
+    text-align: center;
+    justify-content: center;
+}
+#page-content{
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 70px;
+}
+.jumbotron{
+    height: auto;
+    padding: 0;
+    opacity: 85%;
+}
+#card-detail-sortie{
+    margin-top: 25px;
+    justify-content: center;
+    align-content: center;
+}
+#card-title-detail-sortie-ok{
+    background-color: #5eb5e0;
+    justify-content: center;
+    font-size: 35px;
+}
+#card-title-detail-sortie-notok{
+    background-color: #C82829;
+    justify-content: center;
+    font-size: 35px;
+}
+#div-sortie-btn{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+#div-sortie-btn a{
+    margin: 10px;
+}
+#td-btn-sortie{
+    margin: 20px;
+}
+#div-sortie-btn button{
+    margin: 10px;
+}
+#div-notok{
+    background-color: #AAAAAA;
+    padding: 5px;
+    border:1px solid black;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-radius:5px;
+}
+#content-subtitle-sortie{
+    justify-content: center;
+    align-content: center;
+}
+#detail-sortie-descritpion{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.table-responsive{
+    margin-top: 15px;
+}
+#alert{
+    justify-content: center;
+    text-align: center;
+    height: auto;
+    font-size: 25px;
+    color: #B0413E;
+}
+#jumbo-index{
+    margin-top: 15px;
+    border:3px solid #313131;
+    border-radius: 15px;
+    background-color: #313131
+}
+#form-filters{
+    background-color: #5eb5e0;
+    padding: 5px 35px 5px 10px;
+    border-radius: 15px;
+}
+#input-filters{
+    margin-left: 20px;
+}
+#detail-user{
+    text-align: justify-all;
+    color: white;
+    font-size: 20px;
+    padding: 5px 30px 10px;
+}
+#title-sortie{
+    color: white;
+    text-align: center;
+}
+#searching-div{
+    padding-top: 10px;
+    padding-bottom: 15px;
+    border-radius: 15px;
+    background-color: #AAAAAA;
+    opacity: 85%;
+}
+#nav-input > div > form > div{
+    margin: 10px;
+}
+#search-navbar{
+    display:inline-block;
+    float: none;
+    font-size: 15px;
+    justify-content: center;
+    align-content: center;
+}
+#search-navbar label{
+    margin: 5px;
+}
+#span-participant{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dates{
+    border:1px solid white;
+    border-radius:5px;
+    padding:20px 0px;
+    margin: 10px 0px;
+    font-size:20px;
+    color:dodgerblue;
+    font-weight:600;
+    overflow:auto;
+}
+.dates div{
+    float:left;
+    width:50%;
+    text-align:center;
+    position:relative;
+}
+.dates strong{
+    display:block;
+    color: black;
+    font-size:18px;
+    font-weight:700;
+}
+.dates span{
+    width:1px;
+    height:40px;
+    position:absolute;
+    right:0;
+    top:0;
+    background:#ebeff2;
+}
+
+.card-body ul{
+    margin: 10px;
+    font-size: 18px;
+}
+.txt-input-profil{
+    width: 60%;
+}
+.card-body h6{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+.card-footer{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border: none;
+    background: none;
+}
+.card{
+    background-color: #AAAAAA;
+    opacity: 85%;
+}
+
+

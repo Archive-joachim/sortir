@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="jumbotron" id="jumbo-index">
+        <div class="container-fluid">
+            <div id="title-sortie">
+                <label style="font-size: 25px">
+                    {{sortie.nom}}
+                </label>
+            </div>
+        </div>
+        <div id="form-filters">
+            <div class="dates">
+                <div class="start">
+                    <strong>DEBUT</strong>{{ sortie.dateHeureDebut|date('d/m/Y H:i') }}
+                    <span></span>
+                </div>
+                <div class="ends">
+                    <strong>FIN</strong>{{ sortie.dateHeureFin|date('d/m/Y H:i') }}
+                </div>
+            </div>
+            <div class="dates">
+                <div class="start">
+                    <strong>CLOTURE</strong>{{ sortie.dateLimiteinscription|date('d/m/Y H:i') }}
+                    <span></span>
+                </div>
+                <div class="end">
+                    <strong>ETAT</strong>{{ sortie.etat.libelle }}
+                </div>
+            </div>
+
+            <ul class="list-group">
+                {% if sortie.etat.libelle == 'annulée' %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-center" id="div-notok">
+                        <span class="badge badge-danger">Sortie annulée</span>
+                        <label>MOTIF: {{ sortie.motif }}</label>
+                    </li>
+                {% elseif sortie.etat.libelle == 'cloturée' %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-center" id="div-notok">
+                        <span class="badge badge-warning">Inscriptions closes</span>
+                        <label>La date limite d'inscription est dépassée</label>
+                    </li>
+                {% elseif sortie.inscriptions.count() == sortie.nbInscriptionsMax %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-center" id="div-notok">
+                        <span class="badge badge-warning">Plus de places</span>
+                        <label>Le nombre maximum de participants a été atteint</label>
+                    </li>
+                {% endif %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Lieu</span>
+                    {{ sortie.Lieu.nom }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Adresse</span>
+                    {{ sortie.Lieu.rue }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Ville</span>
+                    {{ sortie.Lieu.ville.nom }} (
+                    {{ sortie.Lieu.ville.codePostal }})
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Longitude</span>
+                    {{ sortie.Lieu.longitude }}
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Latitude</span>
+                    {{ sortie.Lieu.latitude }}
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-secondary">Organisateur</span>
+                    <a href="{{ path('user_profil', {'id': sortie.organisateur.id}) }}">{{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom }}</a>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <span class="badge badge-secondary">J'y participe</span>
+                    {% if sortie.isRegistered(app.user) %}
+                        OUI
+                    {% else %}
+                        NON
+                    {% endif %}
+                </li>
+
+                <li class="list-group-item justify-content-center align-items-center">
+                        <span class="badge badge-secondary">Détails</span>
+                    <div class="container-fluid p-2 my-auto">
+                        <label class="card-subtitle text-muted"><i>{{ sortie.infossortie }}</i></label>
+                    </div>
+                </li>
+            </ul>
+            <ul class="list-group list-group-item-dark" id="span-participant" >
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-danger">Liste des participants</span>
+                    {{ sortie.inscriptions.count() }}/{{ sortie.nbInscriptionsMax }}
+                </li>
+                {% for inscrit in sortie.inscriptions %}
+                    <li class="list-group-item">
+                        {% if app.user == sortie.organisateur %}
+                            <a href="{{ path('user_profil', {'id': inscrit.participant.id}) }}">{{ inscrit.participant.nom }} {{ inscrit.participant.prenom }}</a>
+                        {% else %}
+                            {{ inscrit.participant.nom }} {{ inscrit.participant.prenom }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+                <div class="card-text" id="div-sortie-btn">
+                    <a class="btn btn-primary" href="{{ path('home') }}">Retour</a>
+                    {% if sortie.organisateur == app.user and sortie.etat.libelle == 'créée' %}
+                        <a class="btn btn-warning" href="{{ path('modif-sortie', {'id' : sortie.id}) }}">Modifier</a>
+                        <a class="btn btn-success" href="{{ path('publish-sortie', {'id' : sortie.id}) }}">Publier</a>
+                    {% else %}
+                        {% if sortie.isOpened and sortie.organisateur != app.user %}
+                            {% if sortie.isRegistered(app.user) %}
+                                <a class="btn btn-primary" href="{{ path('desinscription', {'id' : sortie.id}) }}">Se
+                                    désister</a>
+                            {% else %}
+                                <a class="btn btn-primary" href="{{ path('inscription', {'id' : sortie.id}) }}">S'inscrire</a>
+                            {% endif %}
+                        {% endif %}
+                        {% if sortie.organisateur == app.user and (sortie.etat.libelle == 'ouverte' or sortie.etat.libelle == 'clôturée') %}
+                            <a class="btn btn-danger" href="{{ path('annul-sortie', {'id' : sortie.id}) }}">Annuler la sortie</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}
+{% endblock %}
+
